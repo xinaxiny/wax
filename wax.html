@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>农民世界</title>
+</head>
+<style>
+    html,
+    body {
+        margin: 0px;
+    }
+
+    .top {
+        margin-top: 30px;
+    }
+
+    .top img {
+        width: 100%;
+    }
+
+    .tab {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px;
+        margin: 10px 0px;
+        font-size: 12px;
+    }
+
+    .tab .list {
+        display: flex;
+        align-items: center;
+    }
+
+    .tab .list img {
+        width: 20px;
+        height: 20px;
+        padding: 0px 5px 0px 0px;
+    }
+
+    .buw {
+        font-size: 12px;
+
+    }
+
+    .buw .list {
+        display: flex;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 10px;
+        background-image: linear-gradient(100deg, #faefe3, #e1edf7);
+        justify-content: space-between;
+    }
+
+    .buw img {
+        width: 80px;
+        /* height: 120px; */
+        padding-top: 2px;
+    }
+
+    img[src=""] {
+        opacity: 0;
+    }
+
+    .buw .time {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+    }
+
+    .kf {
+        position: fixed;
+        top: 80%;
+        left: 70%;
+        background: #0e0bce;
+        padding: 15px;
+        border-radius: 50%;
+        color: #fff;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    p {
+        text-align: center;
+        color: red;
+        font-size: 12px;
+    }
+
+    .simg {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <!-- <div class="top">
+            <img src="./img/lis.png">
+        </div> -->
+        <!-- <p></p> -->
+        <div class="tab">
+            <div class="list">
+                <img src="./img/rou.png">
+                <span>{{rou}}</span>
+            </div>
+            <div class="list">
+                <img src="./img/mu.png">
+                <span>{{mu}}</span>
+            </div>
+            <div class="list">
+                <img src="./img/jin.png">
+                <span>{{jin}}</span>
+            </div>
+            <!-- <div class="list">
+                <img src="./img/wax.png">
+                <span>3.00</span>
+            </div> -->
+        </div>
+        <p>农民世界QQ群：783403245</p>
+        <div class="buw">
+            <div class="list" v-for="i in listdata">
+                <div class="time">
+                    <span>铸造价(实时)：{{i.jin*jin + i.mu*mu | sum}}/WAX</span>
+                    <span>日收益：{{i.aj ? i.aj +'/金' : i.am ? i.am +'/木' : i.ar ? i.ar + '/肉' : ''}}---{{i.aj*jin + i.am*mu + i.ar*rou | sum}}/WAX</span>
+                    <span>日消耗：{{i.sjin + '/金'  + '---' + i.srou + '/肉'}}---{{i.sjin*jin + i.srou*rou  | sum}}/WAX</span>
+                    <span>回本周期：{{(i.jin*jin + i.mu*mu)/((i.aj*jin + i.am*mu + i.ar*rou)  - (i.sjin*jin + i.srou*rou) ) | sum}}/天(去除日消耗)</span>
+                </div>
+                <div class="simg">
+                    <span>{{i.name}}</span>
+                    <img :src="i.img">
+                </div>
+
+            </div>
+        </div>
+        <div class="kf" @click="qun()">
+            加入群聊
+        </div>
+    </div>
+</body>
+<script src="./node_modules/axios/dist/axios.min.js"></script>
+<script src="./node_modules/vue/dist/vue.min.js"></script>
+<script>
+    var app;
+    new Vue({
+        el: "#app",
+        data() {
+            return {
+                count: 1,
+                list: [],
+                rou: 0.00,
+                jin: 0.00,
+                mu: 0.00,
+                listdata: [{
+                    name:"石斧",
+                    jin:400,
+                    mu:2400,
+                    sjin:24,
+                    srou:48,
+                    smu:0,
+                    aj:0,
+                    am:120,
+                    ar:0,
+                    img:'https://mypinata.cloud/ipfs/QmUCg2d1Ww2734tiCwEPA5s3WL1Pr9jMTNsoPx3A9vKsJe',
+                    
+                },{
+                    name:"手锯",
+                    jin:1200,
+                    mu:7200,
+                    sjin:72,
+                    srou:144,
+                    smu:0,
+                    aj:0,
+                    am:408,
+                    ar:0,
+                    img:'https://mypinata.cloud/ipfs/QmPiXkBCNYgKw1J4Yxnj9Z6RUPfmxER5ePPc8YCkdykinN',
+                },{
+                    name:"电锯",
+                    jin:3600,
+                    mu:21600,
+                    sjin:216,
+                    srou:288,
+                    smu:0,
+                    aj:0,
+                    am:1296,
+                    ar:0,
+                    img:'https://mypinata.cloud/ipfs/QmZFGkTKNGb52N7B8JDKC8WpRmAXoGRodb3fuDn8rtM8Eh',
+                },{
+                    name:"鱼竿",
+                    jin:200,
+                    mu:1200,
+                    sjin:24,
+                    srou:0,
+                    smu:0,
+                    aj:0,
+                    am:0,
+                    ar:120,
+                    img:'https://mypinata.cloud/ipfs/QmVy4xphMjDCYGmzQR6FhU8E6gHEaMpKbzf39wKFyqNBVV',
+                },{
+                    name:"渔网",
+                    jin:800,
+                    mu:4800,
+                    sjin:96,
+                    srou:0,
+                    smu:0,
+                    aj:0,
+                    am:0,
+                    ar:480,
+                    img:'https://mypinata.cloud/ipfs/QmPRWao5gLUmTktJZHdEg7A4dLYA9TzBjSGDvLNk3aCeh4',
+                },{
+                    name:"渔船",
+                    jin:3200,
+                    mu:19200,
+                    sjin:154,
+                    srou:0,
+                    smu:0,
+                    aj:0,
+                    am:0,
+                    ar:1920,
+                    img:'https://mypinata.cloud/ipfs/QmSWBPJ5edSngtFAZMBw26EjexWMMYTHcHghWfSp9aWMdq',
+                },{
+                    name:"挖掘机",
+                    jin:4000,
+                    mu:24000,
+                    sjin:12,
+                    srou:319,
+                    smu:0,
+                    aj:1200,
+                    am:0,
+                    ar:0,
+                    img:'https://mypinata.cloud/ipfs/QmfM1hip56o1sUKfQFEhVVMjMcwpnC61dNwEtPrV67tagy',
+                },
+                
+              ]
+            };
+        },
+        beforeCreate() {
+            app = this;
+        },
+        filters: {
+            sum(s){
+              return s.toFixed(0)      
+            },
+
+        },
+        computed: {
+            sum() {
+
+            },
+
+        },
+        created() {
+            app.getlist()
+        },
+        methods: {
+            async getlist() {
+                var d = await axios.get('http://39.104.69.136:82/api/farmer/list')
+                var data = d.data.data
+                app.list = data.list
+                app.rou = data.fwfMoney
+                app.jin = data.fwgMoney
+                app.mu = data.fwwMoney
+                console.log(app.list);
+            },
+            qun() {
+                window.open("https://jq.qq.com/?_wv=1027&k=3Cj55xCd")
+            }
+
+        },
+    });
+</script>
+
+</html>
